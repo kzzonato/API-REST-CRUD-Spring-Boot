@@ -1,0 +1,16 @@
+package com.example.CRUD.infra;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class ExceptionDto {
+
+	String message;
+	Integer status;
+	
+	public ExceptionDto(String message, Integer status) {
+		this.message = message;
+		this.status = status;
+	}
+	
+}
