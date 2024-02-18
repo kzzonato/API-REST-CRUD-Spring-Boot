@@ -1,7 +1,7 @@
 <body>
   <main>
     <h1 align="center">☕API REST CRUD🍃</h1>
-    <p>Uma API para cadastrar produtos, algo simples para práticar a sintaxe de uma API REST usando migrations(FlyWay), banco de dados PostgreSQL, IDE Eclipse, MAVEN, validando entrada de dados nos endpoints, Insominia para testar os endpoints, classes para tratar erros e DTOs para transferir dados.</p>
+    <p>Uma API para cadastrar produtos, algo simples para práticar a sintaxe de uma API REST usando migrations(FlyWay), banco de dados PostgreSQL, IDE Eclipse, MAVEN, validando entrada de dados nos endpoints, Insomnia para testar os endpoints, classes para tratar erros e DTOs para transferir dados.</p>
     <br>
     <h3>Dependências Utilizadas no projeto</h3>
     <ul>
