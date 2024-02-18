@@ -1,5 +1,6 @@
 package com.example.CRUD.controller.product;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.aop.ThrowsAdvice;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.CRUD.domain.dto.product.GetAllProductsDto;
 import com.example.CRUD.domain.dto.product.RequestProductDto;
+import com.example.CRUD.domain.dto.product.ResponseProductDto;
 import com.example.CRUD.domain.dto.product.UpdateProductDto;
 import com.example.CRUD.domain.model.product.ProductModel;
 import com.example.CRUD.domain.repository.product.ProductRepository;
@@ -31,18 +34,32 @@ public class ProductController {
 	private ProductRepository productRepository;
 
 	@GetMapping
-	public ResponseEntity getAllProducts() {
-		var allProducts = productRepository.findAllByActiveTrue();
+	public ResponseEntity<List<GetAllProductsDto>> getAllProducts() {
+		var allProducts = productRepository.findAllByActiveTrue().stream().map(GetAllProductsDto::new).toList();
 		return ResponseEntity.ok(allProducts);
 	}
+	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity getProductById(@PathVariable String id) {
+		Optional<ProductModel> optionalProduct = productRepository.findById(id);
+		if(optionalProduct.isPresent()) {
+			var product = optionalProduct.get();
+			return ResponseEntity.ok(new ResponseProductDto(product));
+		} else {
+			throw new EntityNotFoundException();
+		}
+	}
+	
 	
 	@PostMapping
 	@Transactional
 	public ResponseEntity registerProduct(@RequestBody @Valid RequestProductDto data) {
 		var product = new ProductModel(data);
 		productRepository.save(product);	
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(new ResponseProductDto(product));
 	}
+	
 	
 	@PutMapping()
 	@Transactional
@@ -52,11 +69,12 @@ public class ProductController {
 			var product = optionalProduct.get();
 			product.setName(data.name());
 			product.setPrice_in_cents(data.price_in_cents());
-			return ResponseEntity.ok(product);
+			return ResponseEntity.ok(new ResponseProductDto(product));
 		} else {
 			throw new EntityNotFoundException();
 		}
 	}
+	
 	
 	@DeleteMapping("/{id}")
 	@Transactional
@@ -71,6 +89,19 @@ public class ProductController {
 		}
 	}
 	
+	
+	@PutMapping("/{id}")
+	@Transactional
+	public ResponseEntity activateProduct(@PathVariable String id) {
+		Optional<ProductModel> optionalProduct = productRepository.findById(id);
+		if(optionalProduct.isPresent()) {
+			var product = optionalProduct.get();
+			product.setActive(true);
+			return ResponseEntity.noContent().build();
+		} else {
+			throw new EntityNotFoundException();
+		}
+	}
 	
 	
  }
