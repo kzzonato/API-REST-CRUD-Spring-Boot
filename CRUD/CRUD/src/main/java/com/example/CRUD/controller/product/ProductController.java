@@ -61,7 +61,7 @@ public class ProductController {
 	}
 	
 	
-	@PutMapping()
+	@PutMapping
 	@Transactional
 	public ResponseEntity updateProduct(@RequestBody @Valid  UpdateProductDto data) {
 		Optional<ProductModel> optionalProduct = productRepository.findById(data.id());
